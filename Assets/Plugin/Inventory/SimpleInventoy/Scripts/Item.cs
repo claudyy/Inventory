@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ClaudeFehlen.ItemSystem.Simple {
     public class Item {
         private int _count;
-        readonly int stackCount = 4;
+        public int stackCount = 4;
         private string _name;
         private ItemType _type;
         public int count {
@@ -57,7 +57,13 @@ namespace ClaudeFehlen.ItemSystem.Simple {
             return removeCount;
         }
         private static Item _empty;
-        public string name {
+        internal int freeSpace {
+            get {
+                return stackCount - _count;
+            }
+        }
+
+        internal string name {
             get {
                 return _name;
             }

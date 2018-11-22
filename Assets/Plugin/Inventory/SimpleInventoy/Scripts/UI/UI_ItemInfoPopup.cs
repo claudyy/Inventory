@@ -15,10 +15,10 @@ public class UI_ItemInfoPopup : MonoBehaviour {
     }
 
 
-    internal void ShowDescription(Item item) {
+    internal void ShowDescription(string title,string desc,UI_BaseSlot slot) {
         Show(true);
-        titel.text = item.name;
-        description.text = item.GetDescription();
+        titel.text = title;
+        description.text = desc;
     }
 
     public void Show(bool v) {

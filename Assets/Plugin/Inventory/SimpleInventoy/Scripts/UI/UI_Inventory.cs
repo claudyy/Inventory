@@ -6,11 +6,8 @@ using UnityEngine;
 
 namespace ClaudeFehlen.ItemSystem.Simple {
 
-    public class UI_Inventory : MonoBehaviour {
-        public Transform content;
-        public List<UI_ItemSlot> slots;
+    public class UI_Inventory<T> : UI_WindoWithGridSlot<T>, I_UI_Inventory where T : UI_ItemSlot{
         List<int> displayIndexs;
-        public UI_ItemSlot slotPrefab;
         public UI_ItemInfo info;
         public UI_ItemInfoPopup popUpinfo;
         public bool popUpNextToSlot;
@@ -23,11 +20,11 @@ namespace ClaudeFehlen.ItemSystem.Simple {
 
         public UI_DragIcon dragIcon;
 
-        public static int dragFrom;
-        public static int dragTo;
+
         // Use this for initialization
-        private void Awake () {
-            slots = content.GetComponentsInChildren<UI_ItemSlot>().ToList();
+        protected override void Awake () {
+            base.Awake();
+            //slots = content.GetComponentsInChildren<UI_ItemSlot>().ToList();
             
         }
         private void Start() {
@@ -39,8 +36,9 @@ namespace ClaudeFehlen.ItemSystem.Simple {
                 filterText.onChangedInput += SortByName;
             }
         }
-        internal List<string> GetSortingList() {
-            return new List<string>() { "names","descending names","type","descending type" };
+        public List<string> GetSortingList()
+        {
+            return new List<string>() { "names", "descending names", "type", "descending type" };
         }
         internal void Sort(int i) {
             switch (i) {
@@ -69,18 +67,11 @@ namespace ClaudeFehlen.ItemSystem.Simple {
             this.inventory = inventory;
             this.inventory.onUpdateView += UpdateView;
             displayIndexs = new List<int>();
-            for (int i = 0; i < inventory.size; i++) {
-                if (slots.Count <= i)
-                    slots.Add(Instantiate(slotPrefab, content));
-                displayIndexs.Add(-1);
-                slots[i].UpdateView(inventory.GetItem(i));
-                slots[i].onEnter += EnterSlot;
-                slots[i].onExit += ExitSlot;
-                slots[i].onClick += ClickSlot;
-                slots[i].onDrag += Drag;
-                slots[i].onUp += ClickUp;
+            FillGrid(inventory.size);
+            for (int i = 0; i < slots.Count; i++)
+            {
+                displayIndexs.Add(i);
             }
-
         }
         public void UpdateView(Inventory inventory) {
             var list = new List<Item>();
@@ -96,10 +87,11 @@ namespace ClaudeFehlen.ItemSystem.Simple {
                     slots[i].UpdateView(inventory.GetItem(displayIndexs[i]));
             }
         }
-        void EnterSlot(UI_ItemSlot slot) {
-            var index = displayIndexs[slots.IndexOf(slot)];
-            if (index == -1)
+        protected override void EnterSlot(UI_BaseSlot slot) {
+            var index = displayIndexs[slots.IndexOf(slot as T)];
+            if (index == -1) {
                 return;
+            }
             if (info != null) {
                 if(inventory.GetItem(index) != Item.Empty)
                     info.ShowDescription(inventory.GetItem(index));
@@ -108,37 +100,41 @@ namespace ClaudeFehlen.ItemSystem.Simple {
                 if (popUpNextToSlot) {
                     popUpinfo.GetComponent<RectTransform>().SetPositionAndRotation(slot.GetComponent<RectTransform>().position + (Vector3)popUpOffest, Quaternion.identity);
                 }
-                popUpinfo.ShowDescription(inventory.GetItem(index));
+                var item = inventory.GetItem(index);
+                popUpinfo.ShowDescription(item.name,item.GetDescription(),slot);
             }
-            dragTo = index;
+            UI_DragIcon.dragTo = index;
 
         }
-        void ExitSlot(UI_ItemSlot slot) {
+        protected override void ExitSlot(UI_BaseSlot slot) {
             if (popUpinfo != null)
                 popUpinfo.Show(false);
         }
-        void ClickSlot(UI_ItemSlot slot) {
-            var index = displayIndexs[slots.IndexOf(slot)];
+        protected override void ClickSlot(UI_BaseSlot slot) {
+            var index = displayIndexs[slots.IndexOf(slot as T)];
             if (index == -1)
                 return;
-            if (inventory.GetItem(index) == Item.Empty)
-                return;
-            if (UI_Inventory.dragFrom != -1)
-                return;
-            dragFrom = displayIndexs[slots.IndexOf(slot)];
-            dragIcon.SetItem(inventory.GetItem(index));
+
+            if (UI_DragIcon.dragFrom != -1) {
+                inventory.SwitchPositions(UI_DragIcon.dragFrom, UI_DragIcon.dragTo);
+                UI_DragIcon.dragFrom = -1;
+                UI_DragIcon.dragTo = -1;
+                dragIcon.Show(false);
+            } else {
+                if (inventory.GetItem(index) == Item.Empty)
+                    return;
+                UI_DragIcon.dragFrom = displayIndexs[slots.IndexOf(slot as T)];
+                dragIcon.SetItem(inventory.GetItem(index));
+            }
         }
-        void Drag(UI_ItemSlot slot) {
+        protected override void Drag(UI_BaseSlot slot) {
 
         }
-        void ClickUp(UI_ItemSlot slot) {
-            if (UI_Inventory.dragFrom == -1)
+        protected override void ClickUp(UI_BaseSlot slot) {
+            if (UI_DragIcon.dragFrom == -1)
                 return;
-            inventory.SwitchPositions(UI_Inventory.dragFrom, dragTo);
-            UI_Inventory.dragFrom = -1;
-            UI_Inventory.dragTo = -1;
-            dragIcon.Show(false);
         }
+
 
     }
 }

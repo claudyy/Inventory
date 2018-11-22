@@ -9,7 +9,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
 
         [UnityTest]
         public IEnumerator SortByName() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemDataA = new Item("TestA", 1);
             var itemDataB = new Item("TestB", 1);
             i.AddItem(itemDataA, 1);
@@ -21,7 +21,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator SortByNameDescending() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemDataA = new Item("TestA", 1);
             var itemDataB = new Item("TestB", 1);
             i.AddItem(itemDataA, 1);
@@ -33,7 +33,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator SortByType() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemDataA = new Item("A", ItemType.armor, 1);
             var itemDataB = new Item("B", ItemType.collectable, 1);
             i.AddItem(itemDataA, 1);
@@ -45,7 +45,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator SortByTypeDescending() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemDataA = new Item("A", ItemType.armor, 1);
             var itemDataB = new Item("B", ItemType.collectable, 1);
             i.AddItem(itemDataA, 1);

@@ -1,0 +1,18 @@
+Drag items in scene
+Collect items item goes into hotbar
+Craft window show
+ivnvenoty and other inventory can hide
+Click in scene use item
+
+Unlock recipe by station
+
+Item Data from Scriptable Object
+
+
+Items Can Spoil
+Durability
+
+
+Buildings can hold Items
+
+no shop but other station

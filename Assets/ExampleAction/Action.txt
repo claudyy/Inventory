@@ -1,0 +1,18 @@
+
+
+Cirlce Items in types
+
+Put modules into weapon
+
+weapon
+Offence Item
+Defence Item
+Armor
+
+Left eqiupe
+scroll up and down
+shift click add modul
+
+Data from scriptable Object
+
+Simple shop

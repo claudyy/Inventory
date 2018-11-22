@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 namespace ClaudeFehlen.ItemSystem.Simple {
 
-    public class Inventory  {
+    public abstract class Inventory  {
         private List<Item> items;
         public Inventory(int size) {
             items = new List<Item>();
@@ -37,7 +37,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
                 if (items[i] == Item.Empty)
                     continue;
                 for (int t = 0; t < types.Count; t++) {
-                    if(items[i].Type == types[t]) {
+                    if (items[i].Type == types[t]) {
                         list.Add(items[i]);
                         break;
                     }
@@ -45,6 +45,35 @@ namespace ClaudeFehlen.ItemSystem.Simple {
             }
             return list;
         }
+
+
+        internal bool HaveSpaceForItem(Item item) {
+            int freeSpace = CountOfSpaceForItem(item);
+            return freeSpace >= item.count;
+        }
+
+        internal int CountOfSpaceForItem(Item item) {
+            var freeSpace = 0;
+            for (int i = 0; i < items.Count; i++) {
+                if (items[i] == Item.Empty) {
+                    freeSpace += item.stackCount;
+                } else {
+                    if (items[i] == item)
+                        freeSpace += items[i].freeSpace;
+                }
+            }
+
+            return freeSpace;
+        }
+
+        public bool HaveSpaceForItem(List<Item> items) {
+            for (int i = 0; i < items.Count; i++) {
+                if (HaveSpaceForItem(items[i]) == false)
+                    return false;
+            }
+            return true;
+        }
+
         public List<Item> GetItemsThatContainInName(string v) {
             var list = new List<Item>();
             for (int i = 0; i < items.Count; i++) {
@@ -52,7 +81,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
                     list.Add(items[i]);
             }
             return list;
-            }
+        }
         public void SortByName() {
             items = items.OrderBy(x => x == Item.Empty ? "z" : x.name).ToList();
             UpdateView();
@@ -80,6 +109,10 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         public Action<Inventory> onUpdateView;
         #endregion
         #region Public Functions
+        public void AddItem(Item data)
+        {
+            AddItem(data, data.count);
+        }
         public void AddItem(Item data, int count) {
             // no space remove spawn pickup
             int addCount = count;
@@ -106,6 +139,8 @@ namespace ClaudeFehlen.ItemSystem.Simple {
 
             for (int i = 0; i < size; i++) {
                 if (items[i].name.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0)
+                    list.Add(i);
+                if (items[i] == Item.Empty)
                     list.Add(i);
             }
             for (int i = list.Count; i < size; i++) {
@@ -144,21 +179,43 @@ namespace ClaudeFehlen.ItemSystem.Simple {
 
             return true;
         }
+        internal void RemoveItemAt(int itemIndex,int count)
+        {
+            items[itemIndex].Remove(count);
+            if(items[itemIndex].count <=0)
+                items[itemIndex] = Item.Empty;
+        }
+        internal void RemoveItemAt(int itemIndex) {
+            items[itemIndex] = Item.Empty;
+        }
         public void SwitchPositions(int fromIndex, int toIndex) {
             SwitchPositions(fromIndex, toIndex, this);
         }
         public void SwitchPositions(int fromIndex, int toIndex,Inventory fromInventory) {
             if (fromIndex >= items.Count || toIndex >= items.Count)
                 return;
+            if(fromInventory.GetItem(fromIndex) == items[toIndex])
+            {
+                PutSameItemOnOneAnother(fromIndex, toIndex, fromInventory);
+                return;
+            }
             var itemFrom = fromInventory.items[fromIndex];
             fromInventory.items[fromIndex] = items[toIndex];
             items[toIndex] = itemFrom;
             UpdateView();
 
         }
+        void PutSameItemOnOneAnother(int fromIndex, int toIndex, Inventory fromInventory)
+        {
+            var toItem = items[toIndex];
+            var fromItem = fromInventory.GetItem(fromIndex);
+            var addedCount = toItem.Add(fromItem.count);
+            fromInventory.RemoveItemAt(fromIndex,addedCount);
+            UpdateView();
+        }
         #endregion
         #region Public Utility
-        public int size {
+        internal int size {
             get {
                 return items.Count;
             }

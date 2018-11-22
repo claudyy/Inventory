@@ -1,0 +1,22 @@
+Character stats
+xp
+attributes
+stats
+
+Item generator
+
+ItemData From XML
+
+Compare with equipt Item
+
+Gems can be put into item
+
+Shift click Auto Equipe
+
+Right Click remove Gems
+
+Grid base crafting
+
+Item Compination
+
+Two Grid Shop

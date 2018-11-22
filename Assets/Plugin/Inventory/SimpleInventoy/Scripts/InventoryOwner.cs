@@ -7,7 +7,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         List<Inventory> inventories = new List<Inventory>();
         public int currency;
         private void Awake() {
-            inventories.Add(new Inventory(100));
+            inventories.Add(new Dummy_Inventory(100));
             inventories.Add(new InventoryEquipement(12));
         }
 
@@ -18,5 +18,15 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         public int GetCurrentCurency() {
             return currency;
         }
+
+        public void AddCurrency(int count) {
+            currency += count;
+        }
+
+        public void RemoveCurrency(int count) {
+            currency -= count;
+        }
+
+
     }
 }

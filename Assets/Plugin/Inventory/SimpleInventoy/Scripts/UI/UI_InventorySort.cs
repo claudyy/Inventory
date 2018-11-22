@@ -19,7 +19,7 @@ public class UI_InventorySort : MonoBehaviour {
                 onClick(buttons.IndexOf(b));
 
     }
-	public void SetInvenory(UI_Inventory inv) {
+	public void SetInvenory(I_UI_Inventory inv) {
 		List<string> list = inv.GetSortingList();
 		for (int i = 0; i < list.Count; i++) {
 				buttons[i].SetText(list[i]);

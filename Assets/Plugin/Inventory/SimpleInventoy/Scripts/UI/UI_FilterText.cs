@@ -11,8 +11,8 @@ public class UI_FilterText : MonoBehaviour {
 		inputField.onValueChange.AddListener(delegate { ValueChangeCheck(); });
 
 	}
-	// Invoked when the value of the text field changes.
-	public void ValueChangeCheck() {
+    // Invoked when the value of the text field changes.
+    internal void ValueChangeCheck() {
 		if(onChangedInput != null )
 			onChangedInput(inputField.text);
 	}

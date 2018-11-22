@@ -14,5 +14,8 @@ public class UI_ItemInfo : MonoBehaviour {
 		description.text = item.GetDescription();
 	}
 
-
+    internal void ShowDescription(string title,string desc) {
+        titel.text = title;
+        description.text = desc;
+    }
 }

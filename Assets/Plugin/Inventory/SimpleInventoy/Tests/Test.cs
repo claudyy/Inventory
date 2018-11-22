@@ -7,7 +7,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
 
         [UnityTest]
         public IEnumerator AddItem() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
             i.AddItem(itemData,1);
             Assert.AreEqual(itemData,i.GetItem(0));
@@ -16,7 +16,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator AddItemTwice() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
             i.AddItem(itemData, 1);
             i.AddItem(itemData, 1);
@@ -26,7 +26,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator AddItemFillStack() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
             i.AddItem(itemData, 4);
             Assert.AreEqual(i.GetItem(0), itemData);
@@ -37,7 +37,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator AddItemFillStackTwice() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
             i.AddItem(itemData, 4);
             i.AddItem(itemData, 4);
@@ -52,7 +52,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
 
         [UnityTest]
         public IEnumerator AddItemRemoveItem() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
 
             i.AddItem(itemData, 4);
@@ -64,7 +64,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator AddItemRemoveMoreThanPossible() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
 
             i.AddItem(itemData, 4);
@@ -75,7 +75,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator AddItemCheckCount() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
 
             i.AddItem(itemData, 4);
@@ -88,7 +88,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator IsFull() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
 
             i.AddItem(itemData, 4*9);
@@ -97,7 +97,7 @@ namespace ClaudeFehlen.ItemSystem.Simple {
         }
         [UnityTest]
         public IEnumerator IsNotFull() {
-            var i = new Inventory(9);
+            var i = new Dummy_Inventory(9);
             var itemData = new Item("Test1", 1);
 
             i.AddItem(itemData, 4 * 8);

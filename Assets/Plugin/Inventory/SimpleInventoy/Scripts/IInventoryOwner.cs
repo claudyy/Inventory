@@ -8,5 +8,9 @@ namespace ClaudeFehlen.ItemSystem.Simple{
     
         List<Inventory> GetInventories();
         int GetCurrentCurency();
+        void AddCurrency(int count);
+        void RemoveCurrency(int count);
+
+
     }
 }

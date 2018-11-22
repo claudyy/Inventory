@@ -7,8 +7,10 @@ using UnityEngine.UI;
 
 public class UI_DragIcon : MonoBehaviour {
     public Image display;
-	// Use this for initialization
-	void Start () {
+    public static int dragFrom;
+    public static int dragTo;
+    // Use this for initialization
+    void Start () {
         Show(false);
     }
 
@@ -18,11 +20,11 @@ public class UI_DragIcon : MonoBehaviour {
         GetComponent<RectTransform>().SetPositionAndRotation(mousePos, Quaternion.identity);
 	}
 
-    public void SetItem(Item item) {
+    internal void SetItem(Item item) {
         display.sprite = item.GetUIDisplay();
         Show(true);
     }
-    public void Show(bool s) {
+    internal void Show(bool s) {
         gameObject.SetActive(s);
     }
 }
